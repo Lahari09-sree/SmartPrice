@@ -1,80 +1,128 @@
-?? SmartPrice
-Explainable Multi-Objective Retail Pricing & Discount Optimization System
-SmartPrice is an AI-powered retail pricing decision-support system that analyzes sales, demand, inventory, competitor pricing, discounts, promotions, and seasonal factors to recommend profitable pricing and discount strategies.
-Unlike a conventional sales dashboard, SmartPrice combines machine learning, business constraints, what-if simulation, inventory intelligence, and explainable recommendations to support data-driven pricing decisions.
+# SmartPrice — Explainable Multi-Objective Retail Pricing & Discount Optimization System
 
-?? Problem Statement
-Retail businesses need to decide:
+SmartPrice is an AI-powered retail pricing decision-support system that combines **machine learning, business constraints, inventory intelligence, competitor pricing, what-if simulation, and explainable recommendations** to identify profitable pricing and discount strategies.
+
+Instead of optimizing only for sales or demand, SmartPrice evaluates multiple business factors such as **profit, demand, inventory pressure, competitor pricing, and profit-margin protection** before recommending a discount.
+
+---
+
+## Problem Statement
+
+Retail businesses need to continuously answer questions such as:
+
 * What price should a product be sold at?
 * How much discount should be offered?
-* When should discounts be increased or reduced?
-* How can excess inventory be cleared without destroying profit?
-* How should competitor prices influence pricing decisions?
+* Will increasing the discount improve demand enough to justify the lost margin?
+* How can excess inventory be cleared without significantly reducing profitability?
+* How should competitor pricing influence the decision?
 * Why was a particular discount recommended?
-A discount may increase demand but reduce profit margin.
-SmartPrice addresses this trade-off by evaluating multiple pricing scenarios and selecting the best feasible decision.
+* Why were alternative discounts rejected?
 
-?? Solution
+A discount may increase demand while simultaneously reducing profit. SmartPrice addresses this trade-off through **multi-scenario pricing analysis and business constraints**.
+
+---
+
+##  Solution
+
 SmartPrice follows this workflow:
-Sales Data + Inventory + Competitor Pricing + Market Conditions
-??
-Data Preprocessing & Feature Engineering
-??
-Machine Learning Demand Prediction
-??
-Multiple Discount Scenario Simulation
-??
-Business Constraints & Multi-Objective Optimization
-??
-Optimal Discount Recommendation
-??
-Explainable + Counterfactual Decision
 
-?? Key Features
-1. ?? Sales & Demand Analytics
-Analyze:
+```text
+Sales + Inventory + Competitor + Market Data
+                    ↓
+        Data Preprocessing & EDA
+                    ↓
+          Feature Engineering
+                    ↓
+        ML-Based Demand Prediction
+                    ↓
+       Multiple Discount Scenarios
+                    ↓
+      Business Constraints & Scoring
+                    ↓
+        Optimal Pricing Decision
+                    ↓
+     Explainable "Why NOT?" Analysis
+                    ↓
+          Business Dashboard
+```
+
+---
+
+##  Key Features
+
+### 1. Sales & Demand Analytics
+
+The dashboard analyzes:
+
 * Revenue
-* Profit
-* Units Sold
+* Estimated profit
+* Units sold
 * Demand
 * Discount impact
 * Seasonal demand
 * Category performance
 * Promotional demand lift
 
-2. ?? Inventory Intelligence
-SmartPrice evaluates inventory pressure using the relationship between inventory and expected demand.
-Products are classified as:
-* Stock Risk
-* Tight
-* Balanced
-* Overstocked
-* Severe Overstock
-This helps identify products that may require inventory clearance strategies.
+---
 
-3. ?? ML-Based Demand Prediction
-A Random Forest Regressor predicts expected product demand using features such as:
-* Product
-* Store
+### 2. Inventory Intelligence
+
+SmartPrice evaluates inventory pressure using the relationship between available inventory and expected demand.
+
+Products are classified into:
+
+| Inventory Status | Meaning                                  |
+| ---------------- | ---------------------------------------- |
+| Stock Risk       | Inventory may be insufficient            |
+| Tight            | Limited inventory                        |
+| Balanced         | Healthy inventory level                  |
+| Overstocked      | Inventory is higher than expected demand |
+| Severe Overstock | Significant excess inventory             |
+
+This allows pricing decisions to consider both **profitability and inventory clearance**.
+
+---
+
+### 3. Machine Learning Demand Prediction
+
+A **Random Forest Regressor** predicts expected demand using features such as:
+
+* Product ID
+* Store ID
 * Category
 * Region
-* Inventory
-* Units Ordered
+* Inventory level
+* Units ordered
 * Price
 * Discount
 * Promotion
-* Competitor Pricing
+* Competitor pricing
 * Seasonality
-* Weather
+* Weather condition
 * Epidemic indicator
 * Calendar features
-Model Performance
-ModelMAERMSER�Linear Regression23.5630.530.578Random Forest14.4020.280.814The Random Forest model was selected because it achieved the best validation performance.
 
-?? Smart Pricing Optimization
+#### Model Performance
+
+| Model             |       MAE |      RMSE |        R² |
+| ----------------- | --------: | --------: | --------: |
+| Linear Regression |     23.56 |     30.53 |     0.578 |
+| **Random Forest** | **14.40** | **20.28** | **0.814** |
+
+The Random Forest model was selected because it achieved the strongest validation performance.
+
+---
+
+## Smart Pricing Optimization
+
 SmartPrice evaluates multiple discount scenarios:
-0%, 5%, 10%, 15%, 20%, 25%
-For every scenario it estimates:
+
+```text
+0% → 5% → 10% → 15% → 20% → 25%
+```
+
+For every scenario, the system estimates:
+
 * Selling price
 * Predicted demand
 * Expected units sold
@@ -83,90 +131,158 @@ For every scenario it estimates:
 * Profit margin
 * Inventory clearance
 * Feasibility
-A minimum 10% profit-margin constraint prevents unsafe discount recommendations.
 
-?? What-If Pricing Simulator
-Users can simulate different discount levels before making a pricing decision.
-For each scenario, the dashboard displays:
-* Expected demand
-* Expected revenue
-* Expected profit
-* Profit margin
-* Inventory clearance
-This allows users to answer questions such as:
-"What happens if I increase the discount from 10% to 20%?"
+A **minimum 10% profit-margin constraint** prevents the system from recommending discounts that would violate the project's profitability safety rule.
 
-?? Explainable "Why NOT?" Analysis
-SmartPrice does not simply provide a recommendation.
-It also explains why alternative discounts were rejected.
+The system therefore searches for a discount that provides the best business outcome rather than simply maximizing demand.
+
+---
+
+##  Explainable "Why NOT?" Analysis
+
+SmartPrice does not only answer:
+
+> **"What discount should I choose?"**
+
+It also answers:
+
+> **"Why shouldn't I choose the other discounts?"**
+
 For example:
-Recommended: 0% discount
+
+```text
+Recommended Discount: 0%
+
 Why NOT 10%?
-Expected profit decreases compared with the recommended scenario.
+Expected profit is lower than the recommended scenario.
+
 Why NOT 20%?
 Expected profit decreases further.
+
 Why NOT 25%?
-The expected profit margin falls below the 10% safety threshold.
-This provides counterfactual explanations that make the pricing recommendation easier for business users to understand.
+Expected profit margin falls below the 10% minimum threshold.
+```
 
-?? Multi-Objective Decision Making
-SmartPrice considers multiple business objectives instead of optimizing only for sales.
-The decision framework considers:
-* Profit maximization
-* Demand
-* Inventory pressure
-* Competitor pricing
-* Profit-margin protection
+This provides a **counterfactual explanation** that makes the recommendation easier for business users to understand.
+
+---
+
+##  What-If Pricing Simulator
+
+Users can test different discount scenarios before making a pricing decision.
+
+The simulator compares:
+
+* Expected demand
+* Revenue
+* Profit
+* Profit margin
 * Inventory clearance
-Therefore, the system is designed as a business decision-support system, rather than only a machine-learning prediction model.
 
-??? Project Structure
+Example business question:
+
+> **What happens if the discount is increased from 10% to 20%?**
+
+The dashboard allows users to compare the scenarios visually before selecting a pricing strategy.
+
+---
+
+## Multi-Objective Decision Making
+
+SmartPrice considers multiple objectives instead of optimizing only for sales.
+
+The decision framework considers:
+
+* **Profit maximization**
+* **Demand**
+* **Inventory pressure**
+* **Competitor pricing**
+* **Profit-margin protection**
+* **Inventory clearance**
+
+This makes SmartPrice a **business decision-support system**, rather than simply a demand-prediction model.
+
+---
+
+## Business Insights
+
+The analysis identified several useful patterns:
+
+* Promotional periods show higher average demand than non-promotional periods.
+* Increasing discounts can increase demand while reducing profit margin.
+* Excess inventory can be identified using inventory-to-demand relationships.
+* Competitor pricing provides additional pricing context.
+* The discount that maximizes demand is not necessarily the discount that maximizes profit.
+* Pricing decisions should balance demand growth with profitability and inventory conditions.
+
+---
+
+##  Project Structure
+
+```text
 SmartPrice/
-?
-??? data/
-?   ??? sales_data.csv
-?   ??? processed_sales_data.csv
-?
-??? models/
-?   ??? demand_model.pkl
-?
-??? notebooks/
-?
-??? src/
-?   ??? data_preprocessing.py
-?   ??? eda.py
-?   ??? demand_model.py
-?   ??? pricing_optimizer.py
-?   ??? smart_optimizer.py
-?   ??? what_if_simulator.py
-?
-??? dashboard/
-?   ??? app.py
-?
-??? README.md
-??? .gitignore
+│
+├── dashboard/
+│   └── app.py
+│
+├── data/
+│   ├── sales_data.csv
+│   └── processed_sales_data.csv
+│
+├── models/
+│   └── demand_model.pkl
+│
+├── src/
+│   ├── data_preprocessing.py
+│   ├── eda.py
+│   ├── demand_model.py
+│   ├── pricing_optimizer.py
+│   ├── smart_optimizer.py
+│   └── what_if_simulator.py
+│
+├── .gitignore
+└── README.md
+```
 
-??? Technology Stack
-Programming
+> **Note:** `demand_model.pkl` is excluded from the GitHub repository because the trained model file is larger than GitHub's individual file-size limit. The model can be regenerated using the training code in `src/demand_model.py`.
+
+---
+
+##  Technology Stack
+
+### Programming
+
 * Python
-Data Analysis
+
+### Data Analysis
+
 * Pandas
 * NumPy
-Machine Learning
+
+### Machine Learning
+
 * Scikit-learn
 * Random Forest Regression
-Visualization
-* Plotly
-* Streamlit
-Data / Database Skills
-* SQL
-* Excel
-Model Management
 * Joblib
 
-?? Dataset
-The project uses a retail store inventory and demand dataset containing approximately 76,000 records and multiple retail attributes.
+### Visualization & Dashboard
+
+* Streamlit
+* Plotly
+
+### Business Analytics
+
+* SQL
+* Excel
+
+---
+
+##  Dataset
+
+The project uses a retail inventory and demand forecasting dataset containing approximately **76,000 records**.
+
 Important variables include:
+
 * Date
 * Store ID
 * Product ID
@@ -182,7 +298,9 @@ Important variables include:
 * Seasonality
 * Weather Condition
 * Demand
-The dataset was processed to create additional analytical features such as:
+
+Additional analytical features were created during preprocessing, including:
+
 * Discounted Price
 * Competitor Price Difference
 * Competitor Price Gap %
@@ -194,78 +312,99 @@ The dataset was processed to create additional analytical features such as:
 * Profit Margin
 * Calendar features
 
-?? Business Insights
-The analysis identified several useful patterns:
-* Promotional periods show higher average demand than non-promotional periods.
-* Increasing discounts can increase demand but reduce profit margin.
-* Excess inventory can be identified using inventory-to-demand ratios.
-* Competitor pricing provides additional pricing context.
-* A discount that maximizes demand is not necessarily the discount that maximizes profit.
-This demonstrates the importance of balancing demand growth with profitability.
+---
 
-?? How to Run
-1. Clone the repository
-git clone <YOUR_GITHUB_REPOSITORY_URL>
+##  How to Run
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Lahari09-sree/SmartPrice.git
 cd SmartPrice
-2. Install dependencies
-pip install pandas numpy scikit-learn joblib streamlit plotly
-3. Run the dashboard
-python -m streamlit run dashboard/app.py
-The Streamlit application will open in your browser.
+```
 
-?? Use Cases
+### 2. Install dependencies
+
+```bash
+pip install pandas numpy scikit-learn joblib streamlit plotly
+```
+
+### 3. Generate the demand model
+
+Run the model-training script if the trained model is not available locally:
+
+```bash
+python src/demand_model.py
+```
+
+This generates the trained model inside the `models/` directory.
+
+### 4. Start the Streamlit dashboard
+
+```bash
+python -m streamlit run dashboard/app.py
+```
+
+The application will open in your browser.
+
+---
+
+##  Use Cases
+
 SmartPrice can support:
+
 * Retail pricing teams
 * E-commerce businesses
 * Inventory management
 * Promotional planning
 * Revenue management
 * Business analysts
-* Data-driven pricing decisions
+* Pricing analysts
+* Data-driven retail decision making
 
-?? Future Enhancements
+---
+
+##  Future Enhancements
+
 Potential future improvements include:
+
 * Time-series demand forecasting
 * Real-time competitor price APIs
 * SQL database integration
 * Automated pricing alerts
-* Dynamic pricing based on real-time inventory
+* Dynamic pricing using real-time inventory
 * Advanced optimization using Bayesian or evolutionary methods
 * Customer-level personalized pricing
 * Cloud deployment
 * Power BI integration
 
-????? Project Author
-Y. Lahari Sree
-Integrated M.Tech � Computer Science Engineering, Business Analytics
-VIT Chennai
-Core Areas
-Python � SQL � Data Analytics � Machine Learning � Business Analytics � Dashboard Development
+---
 
-? Project Highlights
-ML-powered demand prediction + business-rule optimization + what-if simulation + explainable counterfactual pricing
-SmartPrice demonstrates how machine learning can be combined with business analytics and decision-making constraints to solve a practical retail pricing problem.
+##  Author
 
-### Step 2 � Save it
+**Y. Lahari Sree**
 
-Save as:
+Integrated M.Tech — Computer Science Engineering, Business Analytics
+**VIT Chennai**
 
-```text
-C:\Users\lahar\Downloads\SmartPrice\README.md
-Important: Don't put your GitHub URL yet. Leave this line:
-git clone <YOUR_GITHUB_REPOSITORY_URL>
-We'll replace it after you create the repository.
-Step 3 � Check it
-Open PowerShell:
-cd C:\Users\lahar\Downloads\SmartPrice
-Then run:
-dir
-You should see:
-data
-dashboard
-models
-notebooks
-src
-README.md
-Once you confirm README.md is there, we'll create the .gitignore and then move to GitHub upload.
+### Core Areas
 
+`Python` • `SQL` • `Data Analytics` • `Machine Learning` • `Business Analytics` • `Dashboard Development`
+
+---
+
+##  Project Highlights
+
+**ML Demand Prediction**
++
+**Multi-Objective Pricing Optimization**
++
+**Inventory Intelligence**
++
+**What-If Simulation**
++
+**Explainable Counterfactual Analysis**
++
+**Interactive Streamlit Dashboard**
+
+SmartPrice demonstrates how **machine learning can be combined with business analytics and decision-making constraints** to solve a practical retail pricing problem.
