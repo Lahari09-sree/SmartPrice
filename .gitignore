@@ -37,3 +37,6 @@ Thumbs.db
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Trained model files
+models/*.pkl
